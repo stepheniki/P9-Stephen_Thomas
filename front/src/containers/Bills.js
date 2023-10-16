@@ -16,10 +16,12 @@ export default class {
     new Logout({ document, localStorage, onNavigate })
   }
 
+  // Gestion click sur "nouvelle note de frais"
   handleClickNewBill = () => {
     this.onNavigate(ROUTES_PATH['NewBill'])
   }
 
+  // Gestion click sur l'icone oeil
   handleClickIconEye = (icon) => {
     const billUrl = icon.getAttribute("data-bill-url")
     const imgWidth = Math.floor($('#modaleFile').width() * 0.5)

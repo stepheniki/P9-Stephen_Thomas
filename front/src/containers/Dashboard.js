@@ -78,6 +78,7 @@ export default class {
     new Logout({ localStorage, onNavigate })
   }
 
+  // gestion du click sur l'icone oeil
   handleClickIconEye = () => {
     const billUrl = $('#icon-eye-d').attr("data-bill-url")
     const imgWidth = Math.floor($('#modaleFileAdmin1').width() * 0.8)
@@ -85,10 +86,14 @@ export default class {
     if (typeof $('#modaleFileAdmin1').modal === 'function') $('#modaleFileAdmin1').modal('show')
   }
 
+  // gestion d'édition des notes de frais
   handleEditTicket(e, bill, bills) {
     e.stopImmediatePropagation()
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
+    
+    // vérifie si this.counter est un nombre pair. Si oui => la liste est déroulée 
+    // (car this.counter est incrémenté à chaque fois que handleEditTicket est appelée)
     if (this.counter % 2 === 0) {
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
@@ -111,6 +116,7 @@ export default class {
     $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
   }
 
+  // Gestion validation soumission formulaire
   handleAcceptSubmit = (e, bill) => {
     const newBill = {
       ...bill,
@@ -121,6 +127,7 @@ export default class {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
+  // Gestion refus soumission formulaire
   handleRefuseSubmit = (e, bill) => {
     const newBill = {
       ...bill,
@@ -131,6 +138,7 @@ export default class {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
+  // Gestion affichage des notes de frais
   handleShowTickets(e, bills, index) {
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
@@ -154,6 +162,7 @@ export default class {
 
   }
 
+  // affichage de toutes les notes de frais
   getBillsAllUsers = () => {
     if (this.store) {
       return this.store

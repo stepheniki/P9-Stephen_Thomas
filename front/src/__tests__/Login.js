@@ -7,8 +7,13 @@ import Login from "../containers/Login.js";
 import { ROUTES } from "../constants/routes";
 import { fireEvent, screen } from "@testing-library/dom";
 
+// En tant qu'utilisateur
 describe("Given that I am a user on login page", () => {
+
+  // quand je ne remplis pas les champs et que je clique sur le bouton de connexion "employé"
   describe("When I do not fill fields and I click on employee button Login In", () => {
+
+    // La page de connexion s'affiche
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
 
@@ -27,7 +32,12 @@ describe("Given that I am a user on login page", () => {
     });
   });
 
+                                   /*************************************/
+
+   // quand je remplis les champs dans un format inccorect et que je clique sur le bouton de connexion "employé"
   describe("When I do fill fields in incorrect format and I click on employee button Login In", () => {
+
+    // La page de connexion s'affiche
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
 
@@ -48,7 +58,11 @@ describe("Given that I am a user on login page", () => {
     });
   });
 
-  describe("When I do fill fields in correct format and I click on employee button Login In", () => {
+                                     /*************************************/
+   // quand je remplis les champs dans un format correct et que je clique sur le bouton de connexion "employé"
+    describe("When I do fill fields in correct format and I click on employee button Login In", () => {
+
+    // je suis identifié en tant qu'employé
     test("Then I should be identified as an Employee in app", () => {
       document.body.innerHTML = LoginUI();
       const inputData = {
@@ -83,9 +97,7 @@ describe("Given that I am a user on login page", () => {
       };
 
       let PREVIOUS_LOCATION = "";
-
       const store = jest.fn();
-
       const login = new Login({
         document,
         localStorage: window.localStorage,
@@ -111,14 +123,22 @@ describe("Given that I am a user on login page", () => {
       );
     });
 
+                                       /*************************************/
+    // la page "note de frais" apparait
     test("It should renders Bills page", () => {
       expect(screen.getAllByText("Mes notes de frais")).toBeTruthy();
     });
   });
 });
 
+                                   /*************************************/
+// En tant qu'utilisateur sur la page de connexion...
 describe("Given that I am a user on login page", () => {
+ 
+  // quand je ne remplis pas les champs et que je clique sur le bouton de connexion "admin"
   describe("When I do not fill fields and I click on admin button Login In", () => {
+
+    // la page de connexion apparait
     test("Then It should renders Login page", () => {
       document.body.innerHTML = LoginUI();
 
@@ -137,7 +157,11 @@ describe("Given that I am a user on login page", () => {
     });
   });
 
+                                     /*************************************/
+  // quand je ne remplis pas les champs dans le format correct et que je clique sur le bouton de connexion "admin"
   describe("When I do fill fields in incorrect format and I click on admin button Login In", () => {
+
+    // la page de connexion apparait
     test("Then it should renders Login page", () => {
       document.body.innerHTML = LoginUI();
 
@@ -158,8 +182,12 @@ describe("Given that I am a user on login page", () => {
     });
   });
 
+                                     /*************************************/
+  // quand je remplis les champs dans le format correct et que je clique sur le bouton de connexion "admin"
   describe("When I do fill fields in correct format and I click on admin button Login In", () => {
-    test("Then I should be identified as an HR admin in app", () => {
+
+    // je suis identifié en tant qu'admin
+        test("Then I should be identified as an HR admin in app", () => {
       document.body.innerHTML = LoginUI();
       const inputData = {
         type: "Admin",
@@ -193,11 +221,8 @@ describe("Given that I am a user on login page", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
       };
-
       let PREVIOUS_LOCATION = "";
-
       const store = jest.fn();
-
       const login = new Login({
         document,
         localStorage: window.localStorage,
@@ -223,6 +248,8 @@ describe("Given that I am a user on login page", () => {
       );
     });
 
+                                       /*************************************/
+    // le tableau de bord "admin" apparait
     test("It should renders HR dashboard page", () => {
       expect(screen.queryByText("Validations")).toBeTruthy();
     });

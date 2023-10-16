@@ -2,7 +2,6 @@
 import { ROUTES_PATH } from '../constants/routes.js'
 export let PREVIOUS_LOCATION = ''
 
-// we use a class so as to test its methods in e2e tests
 export default class Login {
   constructor({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store }) {
     this.document = document
@@ -15,6 +14,8 @@ export default class Login {
     const formAdmin = this.document.querySelector(`form[data-testid="form-admin"]`)
     formAdmin.addEventListener("submit", this.handleSubmitAdmin)
   }
+
+  // gestion de la soumission employee
   handleSubmitEmployee = e => {
     e.preventDefault()
     const user = {
@@ -36,7 +37,7 @@ export default class Login {
       })
 
   }
-
+  // gestion de la soumission admin
   handleSubmitAdmin = e => {
     e.preventDefault()
     const user = {
