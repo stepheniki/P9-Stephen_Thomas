@@ -47,10 +47,10 @@ describe("Given I am connected as an employee", () => {
 
       // Vérification que l'icône de la fenêtre est mise en surbrillance (classe 'active-icon')
       expect(windowIcon).toHaveClass('active-icon')
-
+    })
 /***************************************************************************************************/
 
-    })
+    // les notes de frais sont affichées dans l'ordre décroissant
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
@@ -59,6 +59,8 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
   })
+
+    // En cliquant sur "nouvelle note de frais", cette page s'affiche
     test('Then button new bills should render new bill page', async () => {
       const root = document.createElement("div")
       root.setAttribute("id", "root")
@@ -71,6 +73,7 @@ describe("Given I am connected as an employee", () => {
       expect(newBill).toBeTruthy()
     })
 
+    //  Au clic sur l'oeil, ouverture de l'image dans la modale
     test('Then eye-icon button should shows right image modal', async () => {
       
       const root = document.createElement("div")
@@ -89,10 +92,10 @@ describe("Given I am connected as an employee", () => {
       const url = eyeButton[1].dataset.billUrl
       const modal = screen.getByAltText('Bill')
       const modalSrc = modal.src.replace('%E2%80%A6','…')
-      //la modale s'affiche ?
+      // la modale s'affiche 
       expect(modal).toBeVisible()
       expect(modalFile).toHaveClass('show')
-      //est-ce la bonne image ?
+      // la bonne image s'affiche
       expect(modalSrc).toBe(url)
       
     })

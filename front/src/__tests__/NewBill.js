@@ -27,15 +27,19 @@ document.body.append(root)
 router()
 window.onNavigate(ROUTES_PATH.NewBill)
 
+/***************************************************************************************************/
+// Connecté en tant qu'employé, page "nouvelle note de frais"
 describe("Given I am a user connected as employee", () => {
   describe("When i'm on new bill page", () => {
-    // test de validation
+    
+    // La nouvelle note de frais doit s'afficher
     test('Then new Bill page should be displayed', async () => {
       await waitFor(() => screen.getByText("Envoyer une note de frais"))
       expect(screen.getByText("Envoyer une note de frais")).toBeTruthy()
       expect(screen.getByTestId("file")).toBeTruthy()      
-    })   
-    
+    })  
+
+/***************************************************************************************************/
     describe('when i try to change the file', () => {
       test('Then input a file with incorrect format should remove the file', async () => {
         //create the view and the instance of NewBill
@@ -63,7 +67,8 @@ describe("Given I am a user connected as employee", () => {
         expect(fileInput.files).toBeNull()
         expect(spyCreate).not.toHaveBeenCalled()
       })
-      //input with a valid file
+/***************************************************************************************************/
+      // Entrer un fichier avec le format correct
       test('Then input a file with correct format should keep the file and then call create method', async () => {
         jest.clearAllMocks()
         document.body.innerHTML = NewBillUI()
@@ -101,7 +106,7 @@ describe("Given I am a user connected as employee", () => {
 /***************************************************************************************************/
 //                                          TEST POST
 /***************************************************************************************************/
-// La méthode update est généralement utilisée pour envoyer une requête POST ou PUT au serveur pour mettre à jour les données.
+// Méthode update : envoyer une requête POST ou PUT au serveur pour mettre à jour les données.
 // Description du groupe de tests : Lorsque le formulaire est soumis avec des valeurs correctes
 describe('when i submit form with good value', () => {
 
@@ -171,13 +176,14 @@ describe('when i submit form with good value', () => {
       })
 
       /***************************************************************************************************/
-
+      // test pour rendre la page "Note de frais"
       test('it should render Bills page', async () => {
         await waitFor(() => screen.getByText("Mes notes de frais"))
         expect(screen.getByText("Mes notes de frais")).toBeTruthy()
       })
     })
-
+/***************************************************************************************************/
+    // Lorsque une erreur se produit sur l'api
     describe("When an error occurs on API", () => {
       beforeEach(() => {
         jest.spyOn(mockStore, "bills")
@@ -195,8 +201,8 @@ describe('when i submit form with good value', () => {
         router()
         window.onNavigate(ROUTES_PATH.NewBill)
       })
-
-
+/***************************************************************************************************/
+      // Gestion des erreurs 404
       test("submit form and fails with 404 message error", async () => {
 
         mockStore.bills.mockImplementationOnce(() => {
@@ -229,8 +235,8 @@ describe('when i submit form with good value', () => {
 
         expect(spyUpdate).rejects.toEqual(new Error("Erreur 404"))
       })
-
-
+/***************************************************************************************************/
+      // Gestion des erreurs 500
       test("fetches bills from an API and fails with 500 message error", async () => {
 
         mockStore.bills.mockImplementationOnce(() => {
@@ -269,4 +275,4 @@ describe('when i submit form with good value', () => {
   })
 })
 
-
+/***************************************************************************************************/
