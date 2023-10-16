@@ -98,17 +98,31 @@ describe("Given I am a user connected as employee", () => {
       })
     })
     
-// test POST
-    describe('when i submit form with good value', () => {
-      test('then it should call the update method', async () => {
+/***************************************************************************************************/
+//                                          TEST POST
+/***************************************************************************************************/
+// La méthode update est généralement utilisée pour envoyer une requête POST ou PUT au serveur pour mettre à jour les données.
+// Description du groupe de tests : Lorsque le formulaire est soumis avec des valeurs correctes
+describe('when i submit form with good value', () => {
+
+  // Test : cela devrait appeler la méthode "update"
+ test('then it should call the update method', async () => {
+
+        // Effacement de toutes les fonctions espionnées (Mocks) précédentes
         jest.clearAllMocks()
+
+        // Simulation de la structure HTML de la page NewBill
         document.body.innerHTML = NewBillUI()
 
-        //creating onNavigate for redirecting after update method
+        // Création de la fonction onNavigate pour simuler la redirection après la méthode "update"
         const onNavigate = (pathname) => {
           document.body.innerHTML = ROUTES({ pathname })
         }
+
+        // Création d'une instance de la classe NewBill avec des données de test
         const billNew = new NewBill({document, onNavigate, store: mockStore, localStorage: window.localStorage})
+
+        // Sélection des éléments HTML représentant les champs du formulaire
         const date = screen.getByTestId('datepicker')
         const amount = screen.getByTestId('amount')
         const pct = screen.getByTestId('pct')
@@ -118,14 +132,15 @@ describe("Given I am a user connected as employee", () => {
         const vat = screen.getByTestId('vat')
         const commentary = screen.getByTestId('commentary')
         
+        // Sélection du formulaire et du bouton de soumission
         const formSubmit = screen.getByTestId('form-new-bill')
         const submitButton = document.querySelector('#btn-send-bill')
        
+        // Espionnage des méthodes "update" et "create" du store
         const spyUpdate = jest.spyOn(mockStore.bills(), 'update')
         const spyCreate = jest.spyOn(mockStore.bills(), 'create')
 
-        
-        //filing form
+        // Remplissage du formulaire avec des valeurs correctes
         fireEvent.change(commentary, {target: {value:'Voila un long et important commentaire'}})
         fireEvent.change(name, {target: {value:'Tres grosse dépense'}})
         fireEvent.change(vat, {target: {value:'200'}})
@@ -133,24 +148,30 @@ describe("Given I am a user connected as employee", () => {
         fireEvent.change(amount, {target: {value:'220'}})
         fireEvent.change(pct, {target: {value:'10'}})
 
+        // Simulation de la sélection d'un fichier à téléverser
         file.addEventListener('change', billNew.handleChangeFile)
         userEvent.upload(file , newFile)
         await new Promise(process.nextTick);
 
+        // Simulation de la soumission du formulaire
         submitButton.addEventListener('click', billNew.handleSubmit)
         userEvent.click(submitButton)
         await new Promise(process.nextTick);
 
-        
-        
+        // Vérification que la méthode "create" a été appelée        
         expect(spyCreate).toHaveBeenCalled()
+
+        // Vérification que les données du formulaire ont été correctement mises à jour
         expect(billNew.fileUrl).toEqual('https://localhost:3456/images/test.jpg')
         expect(billNew.billId).toEqual('1234')
         
-        //update method call with good values ?
+        // Vérification que la méthode "update" a été appelée avec les bonnes valeurs
         expect(spyUpdate).toHaveBeenCalled()
         expect(spyUpdate).toBeCalledWith({"data": "{\"email\":\"employee@test.tld\",\"type\":\"Transports\",\"name\":\"Tres grosse dépense\",\"amount\":220,\"date\":\"2021-01-01\",\"vat\":\"200\",\"pct\":10,\"commentary\":\"Voila un long et important commentaire\",\"fileUrl\":\"https://localhost:3456/images/test.jpg\",\"fileName\":\"une-image.jpg\",\"status\":\"pending\"}", "selector": "1234"})
       })
+
+      /***************************************************************************************************/
+
       test('it should render Bills page', async () => {
         await waitFor(() => screen.getByText("Mes notes de frais"))
         expect(screen.getByText("Mes notes de frais")).toBeTruthy()

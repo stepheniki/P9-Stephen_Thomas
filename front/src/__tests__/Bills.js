@@ -47,6 +47,7 @@ describe("Given I am connected as an employee", () => {
 
       // Vérification que l'icône de la fenêtre est mise en surbrillance (classe 'active-icon')
       expect(windowIcon).toHaveClass('active-icon')
+
 /***************************************************************************************************/
 
     })
@@ -98,21 +99,33 @@ describe("Given I am connected as an employee", () => {
 })
 
 
+/***************************************************************************************************/
+//                           Test d'intégration GET avec erreurs 404 et 500
+/***************************************************************************************************/
+// test GET car il vérifie la récupération et l'affichage des données depuis l'API (simulé par mockStore.bills). 
+// Il ne modifie pas les données, mais vérifie plutôt si les données sont correctement récupérées et présentées à l'utilisateur.
 
-
-//test d'intégration GET avec erreurs 404 et 500
 
 describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bills Page", () => {
     test("fetches bills from mock API GET", async () => {
+
+      // Simuler un utilisateur connecté de type Employee
       localStorage.setItem("user", JSON.stringify({ type: "Employee"}));
+
+      // Créer un élément div pour représenter la racine de l'application
       const root = document.createElement("div")
       root.setAttribute("id", "root")
       document.body.append(root)
       router()
+
+      // Naviguer vers la page "Bills"
       window.onNavigate(ROUTES_PATH.Bills)
+
+      // Attendre que le contenu de la page soit chargé
       await waitFor(() => screen.getByText("Mes notes de frais"))
-      //les 4 notes de frais sont elles présentes ?
+
+      // Vérifier si les données des notes de frais sont correctement affichées
       const content1 = screen.getByText('encore')
       expect(content1).toBeDefined()
       const content2 = screen.getByText('test1')
@@ -121,23 +134,35 @@ describe("Given I am a user connected as Employee", () => {
       expect(content3).toBeTruthy()
       const content4 = screen.getByText('test2')
       expect(content4).toBeDefined()
-      //verification par taille 
+
+      // Vérifier la présence des icônes d'œil pour chaque note de frais
       expect(screen.getAllByTestId('icon-eye').length).toEqual(4)
-      //modale pour l'affichage de la note de frais
+
+      // Vérifier la présence de la modale pour l'affichage des notes de frais
       expect(screen.getByText('Justificatif')).toBeVisible()
-      //bouton pour une nouvelle note de frais
+
+      // Vérifier la présence du bouton pour une nouvelle note de frais
       expect(screen.getByTestId('btn-new-bill')).toHaveTextContent('Nouvelle note de frais')
-      //body avec les notes de frais et defined
+
+      // Vérifier la présence de l'élément d'interface utilisateur contenant les données des notes de frais
       expect(screen.getByTestId("tbody")).toBeDefined()
-      //body avec les 4 notes de frais
+
+      // Vérifier la présence des 4 notes de frais dans l'élément d'interface utilisateur
       expect(screen.getByTestId("tbody")).toHaveTextContent('encore')
       expect(screen.getByTestId("tbody")).toHaveTextContent('test1')
       expect(screen.getByTestId("tbody")).toHaveTextContent('test3')
       expect(screen.getByTestId("tbody")).toHaveTextContent('test2')
     })
+
+                                   /*************************************/
+  // Lorsqu'une erreur se produit sur l'API...
   describe("When an error occurs on API", () => {
     beforeEach(() => {
+
+      // Espionner l'appel à la méthode bills() du mockStore
       jest.spyOn(mockStore, "bills")
+
+      // Définir localStorage pour simuler un utilisateur connecté de type Employee
       Object.defineProperty(
           window,
           'localStorage',
@@ -146,11 +171,17 @@ describe("Given I am a user connected as Employee", () => {
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
+
+      // Créer un élément div pour représenter la racine de l'application
       const root = document.createElement("div")
       root.setAttribute("id", "root")
       document.body.appendChild(root)
+
+      // Configurer le router pour l'application
       router()
     })
+                          
+    // Cas de test en cas d'erreur 404 lors de la récupération des données depuis l'API 
     test("fetches bills from an API and fails with 404 message error", async () => {
 
       mockStore.bills.mockImplementationOnce(() => {
@@ -159,13 +190,24 @@ describe("Given I am a user connected as Employee", () => {
             return Promise.reject(new Error("Erreur 404"))
           }
         }})
+
+      // Naviguer vers la page "Bills"
       window.onNavigate(ROUTES_PATH.Bills)
+
+      // Attendre le prochain cycle de l'événement pour permettre le rendu
       await new Promise(process.nextTick);
+
+      // Vérifier si le message d'erreur 404 est affiché sur la page
       const message = await screen.getByText(/Erreur 404/)
       expect(message).toBeTruthy()
     })
 
+                                   /*************************************/
+
+    // Cas de test en cas d'erreur 500 lors de la récupération des données depuis l'API
     test("fetches messages from an API and fails with 500 message error", async () => {
+      
+      // Simuler une réponse d'API avec une erreur 500
       mockStore.bills.mockImplementationOnce(() => {
         return {
           list : () =>  {
@@ -173,8 +215,13 @@ describe("Given I am a user connected as Employee", () => {
           }
         }})
 
+      // Naviguer vers la page "Bills"
       window.onNavigate(ROUTES_PATH.Bills)
+
+      // Attendre le prochain cycle de l'événement pour permettre le rendu
       await new Promise(process.nextTick);
+
+      // Vérifier si le message d'erreur 500 est affiché sur la page
       const message = await screen.getByText(/Erreur 500/)
       expect(message).toBeTruthy()
     })
