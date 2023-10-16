@@ -29,6 +29,7 @@ window.onNavigate(ROUTES_PATH.NewBill)
 
 describe("Given I am a user connected as employee", () => {
   describe("When i'm on new bill page", () => {
+    // test de validation
     test('Then new Bill page should be displayed', async () => {
       await waitFor(() => screen.getByText("Envoyer une note de frais"))
       expect(screen.getByText("Envoyer une note de frais")).toBeTruthy()
@@ -36,7 +37,6 @@ describe("Given I am a user connected as employee", () => {
     })   
     
     describe('when i try to change the file', () => {
-      //can we input incorrect file ?
       test('Then input a file with incorrect format should remove the file', async () => {
         //create the view and the instance of NewBill
         document.body.innerHTML = NewBillUI()

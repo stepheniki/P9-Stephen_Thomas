@@ -12,23 +12,42 @@ import mockStore from "../__mocks__/store"
 
 import router from "../app/Router.js";
 
+/***************************************************************************************************/
+//                                          DEROULEMENT D'UN TEST STANDARD
+/***************************************************************************************************/
+// Utilisation de jest.mock pour simuler le comportement du store de l'application
 jest.mock("../app/store", () => mockStore)
+
+// Début du test : l'utilisateur est connecté en tant qu'employé
 describe("Given I am connected as an employee", () => {
+
+  // Lorsque je suis sur la page des notes de frais
   describe("When I am on Bills Page", () => {
+
+    // Test : l'icône des notes de frais dans le layout vertical doit être mise en surbrillance
     test("Then bill icon in vertical layout should be highlighted", async () => {
 
+      // Configuration du localStorage avec les informations d'un utilisateur de type "Employee"
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
+
+      // Création d'un élément de racine dans le DOM
       const root = document.createElement("div")
       root.setAttribute("id", "root")
       document.body.append(root)
+
+      // Simulation de la navigation vers la page des notes de frais
       router()
       window.onNavigate(ROUTES_PATH.Bills)
-      //icone du vertical layout bien présent
+
+      // Recherche de l'icône de la fenêtre dans le layout vertical
       const windowIcon = await screen.getByTestId('icon-window')
+
+      // Vérification que l'icône de la fenêtre est mise en surbrillance (classe 'active-icon')
       expect(windowIcon).toHaveClass('active-icon')
+/***************************************************************************************************/
 
     })
     test("Then bills should be ordered from earliest to latest", () => {
