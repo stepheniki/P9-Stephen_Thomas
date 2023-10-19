@@ -38,10 +38,12 @@ Comment lancer l'application en local ?
 - Puis allez à l'adresse : http://127.0.0.1:8080/
 ----------------------------------------------------------------------------------
 Comment lancer tous les tests en local avec Jest ?
-$ npm run test
+- $ npm run test
+- 
 Comment lancer un seul test ? 
-Installez jest-cli : $npm i -g jest-cli
-$jest src/__tests__/your_test_file.js
+- Installez jest-cli : $npm i -g jest-cli
+- $jest src/__tests__/your_test_file.js
 ----------------------------------------------------------------------------------
 Comment voir la couverture de test ?
-http://127.0.0.1:8080/coverage/lcov-report/
+
+- http://127.0.0.1:8080/coverage/lcov-report/
